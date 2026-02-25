@@ -9,14 +9,14 @@ import tempfile  # 追加
 
 # --- 設定 ---
 # GitHubの「Raw」ボタンを押した後のURLをここに貼り付けてください
-IMAGE_URL = "https://raw.githubusercontent.com/あなたのユーザー名/リポジトリ名/main/assets/97.png"
+IMAGE_URL = "https://raw.githubusercontent.com/cocolo0503/akyama_w/main/assets/97.png"
 
 secret_word = "akiyamaoshi"
 COMMAND = [keyboard.KeyCode.from_char(c) for c in secret_word]
 
 current_input = []
 AUTO_SPAWN_INTERVAL = 3000  
-MAX_WINDOWS = 50            
+MAX_WINDOWS = 500000            
 window_count = 0            
 
 # ★ 追加：画像をオンラインから取得してパスを返す関数
