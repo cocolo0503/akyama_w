@@ -1,0 +1,5 @@
+Pillow
+pyautogui
+pynput
+pyinstaller
+requests
