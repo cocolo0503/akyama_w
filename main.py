@@ -1,30 +1,32 @@
+# import libraries
 import tkinter as tk
 from PIL import Image, ImageTk
 import pyautogui
 import random
 from pynput import keyboard
 import os
-import requests  # 追加
-import tempfile  # 追加
+import requests
+import tempfile
 
-# --- 設定 ---
-# GitHubの「Raw」ボタンを押した後のURLをここに貼り付けてください
+# search image
 IMAGE_URL = "https://raw.githubusercontent.com/cocolo0503/akyama_w/main/assets/97.png"
 
+# setting password
 secret_word = "akiyamaoshi"
 COMMAND = [keyboard.KeyCode.from_char(c) for c in secret_word]
 
+# def var
 current_input = []
-AUTO_SPAWN_INTERVAL = 3000  
-MAX_WINDOWS = 500000            
-window_count = 0            
+AUTO_SPAWN_INTERVAL = 1000
+MAX_WINDOWS = 500000
+window_count = 0
 
-# ★ 追加：画像をオンラインから取得してパスを返す関数
+# get image path
 def get_image_path():
-    # PCの一時フォルダに保存するパスを作成
+    # saving temp folder
     temp_path = os.path.join(tempfile.gettempdir(), "downloaded_97.png")
     
-    # まだダウンロードしていない場合のみ実行
+    # non download
     if not os.path.exists(temp_path):
         try:
             print("画像をダウンロード中...")
@@ -33,15 +35,16 @@ def get_image_path():
                 with open(temp_path, "wb") as f:
                     f.write(response.content)
             else:
-                return None # ダウンロード失敗
+                return None
         except Exception as e:
             print(f"エラー: {e}")
             return None
     return temp_path
 
-# ダウンロードを実行してパスを取得
+# getting path
 IMAGE_PATH = get_image_path()
 
+# running shutdown images
 def on_press(key):
     global current_input
     current_input.append(key)
@@ -53,9 +56,11 @@ def on_press(key):
     if len(current_input) > 20:
         current_input = current_input[-len(COMMAND):]
 
+# def shutdown running
 listener = keyboard.Listener(on_press=on_press)
 listener.start()
 
+# create image windows
 def create_window():
     global window_count
     if window_count >= MAX_WINDOWS or IMAGE_PATH is None:
@@ -66,7 +71,6 @@ def create_window():
     window.attributes("-topmost", True)
 
     width, height = 200, 200
-    # IMAGE_PATH（一時フォルダのパス）から読み込む
     img = Image.open(IMAGE_PATH).convert("RGBA")
     img = img.resize((width, height))
     tk_img = ImageTk.PhotoImage(img)
@@ -82,6 +86,7 @@ def create_window():
     window_count += 1
     root.after(AUTO_SPAWN_INTERVAL, create_window)
 
+# bug mouse
 def jump_mouse():
     screen_w, screen_h = pyautogui.size()
     pyautogui.moveTo(random.randint(0, screen_w), random.randint(0, screen_h), duration=0)
@@ -90,7 +95,7 @@ def jump_mouse():
 root = tk.Tk()
 root.withdraw() 
 
-# 画像が正常に準備できてから開始
+# running
 if IMAGE_PATH:
     create_window()
     jump_mouse()
